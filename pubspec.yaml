@@ -1,0 +1,72 @@
+name: buildflow_frontend
+description: "A new Flutter project."
+publish_to: 'none' # لمنع النشر في pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^3.14.0
+  firebase_auth: ^5.6.0
+  cloud_firestore: ^5.6.9
+  firebase_storage: ^12.4.7
+  smooth_page_indicator: ^1.1.0 
+  flutter_map: ^6.0.0
+  latlong2: ^0.9.0
+
+
+  # الدفع وعرض الويب
+ # flutter_braintree: ^4.0.0
+  webview_flutter: ^4.13.0
+
+  # أدوات مساعدة
+  get: ^4.6.6
+  http: ^1.4.0
+  flutter_secure_storage: ^9.0.0
+  get_storage: ^2.1.1
+  logger: ^2.0.2
+
+  # معالجة الصور والملفات
+  image_picker: ^1.0.7
+  file_picker: ^10.2.0
+
+  # واجهة المستخدم
+  curved_navigation_bar: ^1.0.3
+  emoji_picker_flutter: ^4.3.0
+  flutter_rating_bar: ^4.0.1
+  intl: ^0.20.2
+  url_launcher: ^6.3.1
+  cupertino_icons: ^1.0.8
+  http_parser: ^4.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/office.png
+    - assets/user.png
+    - assets/company.png
+    - assets/logo.png
+    - assets/logo.jpg
+    - assets/logoo.png
+    - assets/design.jpg
+    - assets/supervision.jpg
+    - assets/consultation.jpg
+    - assets/officee.png
+    - assets/individual.jpg
+    - assets/companyy.png
+    - assets/step1.jpg
+    - assets/step2.jpg
+    - assets/step3.jpg
