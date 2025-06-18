@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import '../session.dart';
@@ -10,6 +11,10 @@ class AuthService {
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
     final url = Uri.parse('$baseUrl/login');
+    logger.d(
+      "AuthService: Attempting to connect to URL: $url",
+    ); //  <<<< أضيفي هذا
+    logger.d("AuthService: _baseUrl value is: $baseUrl"); //  <<<< أضيفي هذا
 
     try {
       final response = await http.post(

@@ -255,16 +255,37 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
               fileBytes,
               file.name,
             );
+          } else if (dbFieldKey == 'structural_file') {
+            uploadedPath = await _projectService.uploadArchitecturalFile(
+              widget.projectId,
+              fileBytes,
+              file.name,
+            );
           } else if (dbFieldKey == 'document_2d') {
             uploadedPath = await _projectService.uploadFinal2DFile(
               widget.projectId,
               fileBytes,
               file.name,
             );
-          }
-          // else if (dbFieldKey == 'document_3d') uploadedPath = await _projectService.uploadOfficeOptional3DFile(widget.projectId, fileBytes, file.name);
-          //  أضيفي license_file و agreement_file إذا كان المكتب سيرفعها (عادة المستخدم)
-          else {
+          } else if (dbFieldKey == 'electrical_file') {
+            uploadedPath = await _projectService.uploadArchitecturalFile(
+              widget.projectId,
+              fileBytes,
+              file.name,
+            );
+          } else if (dbFieldKey == 'mechanical_file') {
+            uploadedPath = await _projectService.uploadArchitecturalFile(
+              widget.projectId,
+              fileBytes,
+              file.name,
+            );
+          } else if (dbFieldKey == 'document_3d') {
+            uploadedPath = await _projectService.uploadArchitecturalFile(
+              widget.projectId,
+              fileBytes,
+              file.name,
+            );
+          } else {
             throw Exception(
               "Unsupported document key for office upload: $dbFieldKey",
             );
@@ -423,6 +444,7 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
     }
   }
 
+  // ignore: unused_element
   Future<void> _handleUserUploadLicense() async {
     if (_isOfficeUploadingFile || _project == null) {
       return; //  استخدم نفس متغير التحميل مبدئياً
@@ -494,16 +516,16 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
     if (paymentRequiredStates.contains(_project!.status) &&
         _project!.proposedPaymentAmount != null &&
         _project!.proposedPaymentAmount! > 0) {
-      /* Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => PaymentScreen(
-                projectId: widget.projectId,
-                totalAmount: _project!.proposedPaymentAmount!,
-              ),
-        ),
-      );*/
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder:
+      //         (context) => PaymentScreen(
+      //           projectId: widget.projectId,
+      //           totalAmount: _project!.proposedPaymentAmount!,
+      //         ),
+      //   ),
+      // );
       logger.i(
         "TODO: Navigate to PaymentScreen for project ${widget.projectId}, amount: ${_project!.proposedPaymentAmount}",
       );
@@ -642,14 +664,30 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
                           onLinkTap ??
                           () async {
                             String fullUrl =
-                                value.startsWith('http')
-                                    ? value
-                                    : '${Constants.baseUrl}/$value';
-                            logger.i("Tapped link: $fullUrl");
-                            await launchUrl(Uri.parse(fullUrl));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Open: $fullUrl")),
+                                '${Constants.baseUrl}/documents/archdocument'; //  تكوين الـ URL
+                            logger.i(
+                              "Attempting to open document link: $fullUrl",
                             );
+
+                            final uri = Uri.parse(fullUrl);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              ); //  يفتح في المتصفح/التطبيق المناسب
+                            } else {
+                              logger.e('Could not launch $fullUrl');
+                              if (mounted) {
+                                // تأكدي أن mounted متاح إذا كنتِ داخل State
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Could not open the document link.',
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
                           },
                       child: Text(
                         value.split('/').last,
@@ -1376,8 +1414,7 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
 
                       project.licenseFile,
                       'license_file',
-                      canUserUpload:
-                          isUserOwner && project.status != 'Completed',
+                      canUserUpload: isUserOwner && project.status != '',
                     ),
                     //  ملفات التقدم التي يرفعها المكتب
                     _buildDocumentItem(
@@ -1818,13 +1855,28 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
                   color: AppColors.accent.withOpacity(0.8),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 String fullUrl =
-                    currentFilePath.startsWith('http')
-                        ? currentFilePath
-                        : '${Constants.baseUrl}/$currentFilePath';
-                logger.i("Viewing document: $fullUrl");
-                launchUrl(Uri.parse(fullUrl));
+                    '${Constants.baseUrl}/documents/archdocument'; //  تكوين الـ URL
+                logger.i("Attempting to open document link: $fullUrl");
+
+                final uri = Uri.parse(fullUrl);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  ); //  يفتح في المتصفح/التطبيق المناسب
+                } else {
+                  logger.e('Could not launch $fullUrl');
+                  if (mounted) {
+                    // تأكدي أن mounted متاح إذا كنتِ داخل State
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Could not open the document link.'),
+                      ),
+                    );
+                  }
+                }
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -2100,13 +2152,30 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
                   color: AppColors.accent.withOpacity(0.8),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
+                //  ✅ جعلها async
+                // ignore: unused_local_variable
                 String fullUrl =
-                    filePath.startsWith('http')
-                        ? filePath
-                        : '${Constants.baseUrl}/$filePath';
-                logger.i("User viewing/downloading document: $fullUrl");
-                launchUrl(Uri.parse(fullUrl));
+                    '${Constants.baseUrl}/documents/archdocument'; //  تكوين الـ URL
+                logger.i("Attempting to open document link: $fullUrl");
+
+                final uri = Uri.parse(fullUrl);
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  ); //  يفتح في المتصفح/التطبيق المناسب
+                } else {
+                  logger.e('Could not launch $fullUrl');
+                  if (mounted) {
+                    // تأكدي أن mounted متاح إذا كنتِ داخل State
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Could not open the document link.'),
+                      ),
+                    );
+                  }
+                }
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -2325,10 +2394,6 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
       icon: Icons.visibility_outlined, // أيقونة للعرض
       isLink: true,
       onLinkTap: () async {
-        //  ✅ جعلها async
-        // ignore: unused_local_variable
-        String relativePath =
-            filePath; //  filePath هو المسار النسبي من قاعدة البيانات
         String fullUrl =
             '${Constants.baseUrl}/documents/archdocument'; //  تكوين الـ URL
         logger.i("Attempting to open document link: $fullUrl");
