@@ -1,21 +1,16 @@
+import 'screens/Basic/onboarding_screen.dart';
 import 'themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'screens/sign/signin_screen.dart';
+// import 'screens/sign/signin_screen.dart';
 import 'package:get/get.dart';
-import 'package:flutter/foundation.dart' show kIsWeb; //  للتحقق من kIsWeb
+// import 'package:flutter/foundation.dart' show kIsWeb; //  للتحقق من kIsWeb
 
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_web/webview_flutter_web.dart'; //  مهم جداً للويب
+// import 'package:webview_flutter/webview_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // مهم قبل async init
   await GetStorage.init(); // ✅ تهيئة التخزين المحلي
-  // ✅✅✅ تهيئة WebViewPlatform للويب ✅✅✅
-  if (kIsWeb) {
-    WebViewPlatform.instance =
-        WebWebViewPlatform(); //  استخدام WebWebViewPlatform
-  }
 
   runApp(const MyApp());
 }
@@ -43,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      home: SignInScreen(),
+      home: OnboardingScreen(),
     );
   }
 }

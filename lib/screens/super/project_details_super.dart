@@ -656,30 +656,30 @@ class _ProjectSupervisionDetailsScreenState
 
     //  نفترض أن حالة المشروع تسمح بالدفع (مثلاً، 'Awaiting User Supervision Payment')
     //  وأننا نستخدم نفس حقول الدفع العامة
-    if (_project!.status == 'Awaiting User Supervision Payment' ||
-        _project!.status == 'Payment Proposal Sent') {
-      //  مثال للحالات
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => PaymentScreen(
-                projectId: widget.projectId,
-                totalAmount: _project!.proposedPaymentAmount!,
-              ),
-        ),
-      ).then((paymentResult) {
-        if (paymentResult == true && mounted) {
-          _loadInitialData(showLoadingIndicator: false);
-        }
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Supervision payment is not due or already processed."),
-        ),
-      );
-    }
+    // if (_project!.status == 'Awaiting User Supervision Payment' ||
+    //     _project!.status == 'Payment Proposal Sent') {
+    //   //  مثال للحالات
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder:
+    //           (context) => PaymentScreen(
+    //             projectId: widget.projectId,
+    //             totalAmount: _project!.proposedPaymentAmount!,
+    //           ),
+    //     ),
+    //   ).then((paymentResult) {
+    //     if (paymentResult == true && mounted) {
+    //       _loadInitialData(showLoadingIndicator: false);
+    //     }
+    //   });
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(
+    //       content: Text("Supervision payment is not due or already processed."),
+    //     ),
+    //   );
+    // }
   }
 
   Future<void> _handleAssignCompany() async {

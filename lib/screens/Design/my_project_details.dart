@@ -516,16 +516,16 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
     if (paymentRequiredStates.contains(_project!.status) &&
         _project!.proposedPaymentAmount != null &&
         _project!.proposedPaymentAmount! > 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => PaymentScreen(
-                projectId: widget.projectId,
-                totalAmount: _project!.proposedPaymentAmount!,
-              ),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder:
+      //         (context) => PaymentScreen(
+      //           projectId: widget.projectId,
+      //           totalAmount: _project!.proposedPaymentAmount!,
+      //         ),
+      //   ),
+      // );
       logger.i(
         "TODO: Navigate to PaymentScreen for project ${widget.projectId}, amount: ${_project!.proposedPaymentAmount}",
       );
