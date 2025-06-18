@@ -1,5 +1,3 @@
-/*
-
 // screens/Design/payment_screen.dart
 // import 'dart:convert'; // غير مستخدم مباشرة هنا
 import 'package:buildflow_frontend/services/create/payment_service.dart'; // ✅
@@ -553,4 +551,4 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   //  _buildTextFormField أصبح غير ضروري إذا استخدمنا Drop-In UI
   // Widget _buildTextFormField(...) { ... }
-}*/
+}

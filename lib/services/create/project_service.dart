@@ -165,6 +165,70 @@ class ProjectService {
     }
   }
 
+  Future<List<ProjectModel>> getMyProjectsp() async {
+    logger.i("getMyProjects CALLED");
+    final token = await Session.getToken();
+    logger.i("Token for getMyProjects: $token");
+
+    if (token == null || token.isEmpty) {
+      logger.w("getMyProjects: No token found, throwing exception.");
+      throw Exception('Authentication token not found. Please log in.');
+    }
+
+    final String url = '$_baseUrl/users/me/projects';
+    logger.i("getMyProjects: Requesting URL: $url");
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      logger.i("getMyProjects: Response status: ${response.statusCode}");
+      if (response.statusCode != 200) {
+        logger.w("getMyProjects: Response body: ${response.body}");
+      }
+
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        return body
+            .map(
+              (dynamic item) =>
+                  ProjectModel.fromJson(item as Map<String, dynamic>),
+            )
+            .toList();
+      } else if (response.statusCode == 401) {
+        throw Exception('Unauthorized. Please log in again.');
+      } else if (response.statusCode == 404) {
+        logger.w('My Projects endpoint not found (404): $url');
+        throw Exception(
+          'Could not find your projects. The service might be unavailable (404). URL: $url',
+        );
+      } else {
+        logger.w(
+          'Failed to load my projects (Status: ${response.statusCode}): ${response.body}',
+        );
+        throw Exception(
+          'Failed to load your projects. Please try again later.',
+        );
+      }
+    } catch (e) {
+      logger.e(
+        "getMyProjects: HTTP request FAILED or error during processing: $e",
+      );
+      // أعد رمي الخطأ الأصلي أو خطأ مخصص
+      if (e is Exception) {
+        rethrow; // أعد رمي الخطأ الأصلي إذا كان Exception
+      }
+      throw Exception(
+        "An unexpected error occurred in getMyProjects: ${e.toString()}",
+      );
+    }
+  }
+
   Future<ProjectreadonlyModel> getProjectDetails(int projectId) async {
     final token =
         await Session.getToken(); // التوكن قد يكون اختيارياً هنا إذا كانت تفاصيل المشروع عامة
@@ -1031,5 +1095,148 @@ class ProjectService {
         "An unexpected error occurred in getMyProjects: ${e.toString()}",
       );
     }
+  }
+
+  Future<ProjectModel> uploadSupervisionReport(
+    int projectId,
+    int weekNumber,
+    Uint8List fileBytes,
+    String fileName,
+  ) async {
+    final token = await Session.getToken();
+    if (token == null) throw Exception('Not authenticated');
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$_baseUrl/projects/$projectId/supervision-report'),
+    );
+
+    request.headers['Authorization'] = 'Bearer $token';
+    request.fields['week_number'] = weekNumber.toString();
+    String? mimeType = lookupMimeType(fileName);
+    MediaType? contentType =
+        mimeType != null
+            ? MediaType.parse(mimeType)
+            : MediaType('application', 'octet-stream');
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        'reportFile',
+        fileBytes,
+        filename: fileName,
+        contentType: contentType,
+      ),
+    );
+    logger.i(
+      "Uploading supervision report for week $weekNumber, project $projectId",
+    );
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    _logResponse("uploadSupervisionReport", response);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final responseData = jsonDecode(response.body) as Map<String, dynamic>;
+      return ProjectModel.fromJson(
+        responseData['project'] as Map<String, dynamic>,
+      );
+    }
+    _handleError(response, "upload supervision report for week $weekNumber");
+  }
+
+  Future<ProjectModel> setSupervisionTarget(int projectId, int weeks) async {
+    final token = await Session.getToken();
+    if (token == null) throw Exception('Not authenticated');
+    final response = await http.put(
+      Uri.parse(
+        '$_baseUrl/projects/$projectId/set-supervision-target',
+      ), // افترض أن لديك هذا الـ API
+      headers: _authHeaders(token),
+      body: jsonEncode({'supervision_weeks_target': weeks}),
+    );
+    _logResponse("setSupervisionTarget", response);
+    if (response.statusCode == 200) {
+      final rd = jsonDecode(response.body) as Map<String, dynamic>;
+      return ProjectModel.fromJson(rd['project'] as Map<String, dynamic>);
+    }
+    _handleError(response, "set supervision target weeks");
+  }
+
+  // جلب مشاريع الإشراف الخاصة بالمستخدم
+  Future<List<ProjectModel>> getMySupervisionProjects({
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    final token = await Session.getToken();
+    if (token == null) throw Exception('User not authenticated.');
+
+    //  الـ API Endpoint الجديد الذي أنشأناه
+    final String url =
+        '$_baseUrl/projects/user/supervision?limit=$limit&offset=$offset';
+    logger.i("getMySupervisionProjects: Requesting URL: $url");
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: _authHeaders(token),
+    );
+    _logResponse("getMySupervisionProjects", response);
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      //  هنا نستخدم ProjectModel الكامل لأنه قد نحتاج لتفاصيل أكثر
+      return body
+          .map((item) => ProjectModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    _handleError(response, "fetch user's supervision projects");
+  }
+
+  // جلب مشاريع الإشراف المعينة للمكتب
+  Future<List<ProjectModel>> getAssignedOfficeSupervisionProjects({
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    final token = await Session.getToken();
+    if (token == null) throw Exception('Office not authenticated.');
+
+    //  الـ API Endpoint الجديد الذي أنشأناه
+    final String url =
+        '$_baseUrl/projects/office/supervision?limit=$limit&offset=$offset';
+    logger.i("getAssignedOfficeSupervisionProjects: Requesting URL: $url");
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: _authHeaders(token),
+    );
+    _logResponse("getAssignedOfficeSupervisionProjects", response);
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      return body
+          .map((item) => ProjectModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    _handleError(response, "fetch office's assigned supervision projects");
+  }
+
+  // جلب مشاريع الإشراف التي تم تعيين الشركة لها
+  Future<List<ProjectModel>> getAssignedCompanySupervisionProjects({
+    int limit = 20,
+    int offset = 0,
+  }) async {
+    final token = await Session.getToken();
+    if (token == null) throw Exception('Company not authenticated.');
+
+    //  الـ API Endpoint الجديد الذي أنشأناه
+    final String url =
+        '$_baseUrl/projects/company/supervision?limit=$limit&offset=$offset';
+    logger.i("getAssignedCompanySupervisionProjects: Requesting URL: $url");
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: _authHeaders(token),
+    );
+    _logResponse("getAssignedCompanySupervisionProjects", response);
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      return body
+          .map((item) => ProjectModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+    _handleError(response, "fetch company's assigned supervision projects");
   }
 }

@@ -35,6 +35,8 @@ class ProjectModel {
   final double? proposedPaymentAmount;
   final double? supervisionPaymentAmount;
   final String? supervisionPaymentStatus;
+  final int? supervisionWeeksTarget; //  العدد الإجمالي لأسابيع الإشراف
+  final int? supervisionWeeksCompleted; //  عدد الأسابيع التي تم "رفع" تقرير لها
   final String? paymentNotes;
   final String? paymentStatus;
   final int? progressStage; //  (0-5 مثلاً)
@@ -53,6 +55,7 @@ class ProjectModel {
   OfficeModel? office;
   CompanyModel? company;
   UserModel? user;
+  OfficeModel? supervisingOffice;
 
   ProjectModel({
     required this.id,
@@ -92,6 +95,9 @@ class ProjectModel {
     this.supervisingOfficeId,
     this.supervisionPaymentAmount,
     this.supervisionPaymentStatus,
+    this.supervisionWeeksTarget,
+    this.supervisionWeeksCompleted,
+    this.supervisingOffice,
   });
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) {
@@ -151,11 +157,18 @@ class ProjectModel {
       companyId: json['assigned_company_id'] as int?, //  قراءة الـ ID
       supervisionPaymentAmount: parseDouble(json['supervision_payment_amount']),
       supervisionPaymentStatus: json['supervision_payment_status'] as String?,
-
+      supervisionWeeksTarget: json['supervision_weeks_target'] as int?,
+      supervisionWeeksCompleted: json['supervision_weeks_completed'] as int?,
       projectDesign:
           json['projectDesign'] != null
               ? ProjectDesignModel.fromJson(
                 json['projectDesign'] as Map<String, dynamic>,
+              )
+              : null, // ✅
+      supervisingOffice:
+          json['supervising_office'] != null
+              ? OfficeModel.fromJson(
+                json['supervising_office'] as Map<String, dynamic>,
               )
               : null, // ✅
       office:
@@ -182,7 +195,7 @@ class ProjectModel {
     if (startDate != null) data['start_date'] = startDate!.toIso8601String();
     if (endDate != null) data['end_date'] = endDate!.toIso8601String();
     if (location!.isNotEmpty) data['location'] = location;
-
+    if (planner5dUrl != null) data['planner5dUrl'] = planner5dUrl;
     // if (licenseFile != null) data['license_file'] = licenseFile;
     // if (agreementFile != null) data['agreement_file'] = agreementFile;
     // if (document2D != null) data['document_2d'] = document2D;

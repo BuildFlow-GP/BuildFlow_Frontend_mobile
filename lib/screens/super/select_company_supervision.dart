@@ -503,7 +503,7 @@ class _SelectCompanyForSupervisionScreenState
                         child: Text(
                           _selectedCompany == null
                               ? 'Select Company or Skip'
-                              : 'Next with ${(_selectedCompany!.name.length > 10 ? _selectedCompany!.name.substring(0, 10) + '...' : _selectedCompany!.name)}',
+                              : 'Next with ${(_selectedCompany!.name.length > 10 ? '${_selectedCompany!.name.substring(0, 10)}...' : _selectedCompany!.name)}',
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -617,8 +617,9 @@ class _ChooseOfficeForSupervisionScreenState
                 office.location.toLowerCase().contains(_searchQuery);
           }).toList();
       if (_selectedOffice != null &&
-          !_filteredOffices.contains(_selectedOffice))
+          !_filteredOffices.contains(_selectedOffice)) {
         _selectedOffice = null;
+      }
     });
   }
 

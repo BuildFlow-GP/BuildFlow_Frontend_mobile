@@ -1,4 +1,3 @@
-import 'package:buildflow_frontend/screens/ReadonlyProfiles/map_selector_screen.dart';
 import 'package:buildflow_frontend/themes/app_colors.dart'; // تأكد من المسار الصحيح
 import '../services/Basic/favorite_service.dart';
 import 'ReadonlyProfiles/project_readonly_profile.dart';
@@ -607,19 +606,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap:
                                     () =>
                                         Get.to(() => const MyProjectsScreen()),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              const MapSelectorScreen(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('Open GeoMOLG Map'),
                               ),
                             ],
                           )
