@@ -17,26 +17,26 @@ class _ChatListScreenState extends State<ChatListScreen> {
   final List<Contact> contacts = [
     Contact(
       id: '1',
-      name: 'Alice',
-      avatarUrl: 'https://i.pravatar.cc/150?img=1',
+      name: 'verona office',
+      avatarUrl: 'assets/office.png',
       lastMessage: 'Hey there!',
-      unreadCount: 2,
+      unreadCount: 0,
       lastMessageTime: DateTime.now().subtract(Duration(minutes: 10)),
     ),
     Contact(
       id: '2',
-      name: 'Bob',
-      avatarUrl: 'https://i.pravatar.cc/150?img=2',
+      name: 'Alquds office',
+      avatarUrl: 'assets/office.png',
       lastMessage: 'Did you finish the report?',
       unreadCount: 0,
       lastMessageTime: DateTime.now().subtract(Duration(hours: 3)),
     ),
     Contact(
       id: '3',
-      name: 'Charlie',
-      avatarUrl: 'https://i.pravatar.cc/150?img=3',
+      name: 'Association office',
+      avatarUrl: 'assets/office.png',
       lastMessage: 'Let’s catch up tomorrow.',
-      unreadCount: 5,
+      unreadCount: 1,
       lastMessageTime: DateTime.now().subtract(Duration(days: 1)),
     ),
   ];
@@ -58,10 +58,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: Text(
-          'Chat List',
-          style: TextStyle(color: AppColors.textPrimary),
-        ),
+        title: Text('Chats', style: TextStyle(color: AppColors.textPrimary)),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(70),
           child: Padding(

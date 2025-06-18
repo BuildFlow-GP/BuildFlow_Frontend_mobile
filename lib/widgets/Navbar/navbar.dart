@@ -4,6 +4,8 @@ import 'package:buildflow_frontend/themes/app_colors.dart';
 import 'package:buildflow_frontend/services/session.dart';
 import 'package:buildflow_frontend/screens/sign/signin_screen.dart';
 
+import '../../screens/chat/chat_list_screen.dart';
+
 class Navbar extends StatelessWidget {
   const Navbar({super.key});
 
@@ -180,7 +182,12 @@ class Navbar extends StatelessWidget {
         Get.toNamed('/contact-us');
         break;
       case 'Chat':
-        // Get.offAll(() => const ChatScreen(contact: Session.getUserId()));
+        final userId = await Session.getUserId();
+        if (userId != null) {
+          Get.offAll(() => ChatListScreen());
+        } else {
+          Get.snackbar('Error', 'User ID not found.');
+        }
         break;
       case 'Logout':
         await Session.clear();

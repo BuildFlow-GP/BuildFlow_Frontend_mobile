@@ -1,4 +1,5 @@
 import 'package:buildflow_frontend/screens/Design/choose_office.dart';
+import 'package:buildflow_frontend/screens/chat/chat_list_screen.dart';
 import 'package:buildflow_frontend/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -237,7 +238,7 @@ class _ConsultationCard extends StatelessWidget {
       opacity: 1.0,
       child: _HoverEffect(
         child: GestureDetector(
-          onTap: () => Get.toNamed('/consultation-page'),
+          onTap: () => Get.to(() => const ChatListScreen()),
           child: Hero(
             tag: 'project_Consultation',
             child: Card(
