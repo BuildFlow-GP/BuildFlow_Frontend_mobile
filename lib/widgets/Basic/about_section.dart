@@ -47,7 +47,7 @@ class AboutSection extends StatelessWidget {
                 "About Us",
                 style: TextStyle(
                   fontSize:
-                      30, // حجم خط أكبر قليلاً ليظهر أوضح على الشاشات الكبيرة
+                      20, // حجم خط أكبر قليلاً ليظهر أوضح على الشاشات الكبيرة
                   fontWeight: FontWeight.bold,
                   color: AppColors.accent,
                   letterSpacing: 0.5,

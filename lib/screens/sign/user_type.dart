@@ -38,7 +38,7 @@ class UserTypeSelectionScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    "To Sign Up, Select Account Type",
+                    "Select Type",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
