@@ -727,7 +727,7 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
           Text(
             title,
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
               color: AppColors.primary,
             ),
@@ -784,7 +784,7 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
         status,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 10.5,
+          fontSize: 9,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -986,7 +986,7 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
                                           ).textTheme.titleLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.textPrimary,
-                                            fontSize: 18,
+                                            fontSize: 15,
                                           ),
                                           onFieldSubmitted:
                                               (value) =>
@@ -1019,11 +1019,11 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
                                     ).textTheme.titleLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: AppColors.textPrimary,
-                                      fontSize: 18,
+                                      fontSize: 15,
                                     ),
                                   ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 4),
                         _buildStatusChip(project.status),
                       ],
                     ),
@@ -1132,7 +1132,7 @@ class _ProjectDetailsViewScreenState extends State<ProjectDetailsViewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildSectionTitle(
-                      'Design Specifications (User Input)',
+                      'Design Specifications)',
                       trailing:
                           (isUserOwner &&
                                   [

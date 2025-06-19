@@ -1,4 +1,8 @@
+import 'package:buildflow_frontend/screens/sign/signin_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../screens/chat/chat_list_screen.dart';
+import '../../services/session.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -49,15 +53,21 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.category),
             title: const Text('Chat'),
             onTap: () {
-              // TODO: Replace with a real Contact object as needed
-              //   Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(contact: Contact(/* initialize fields here */),)));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatListScreen()),
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () {
-              Navigator.pop(context);
+            onTap: () async {
+              await Session.clear();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignInScreen()),
+              );
             },
           ),
         ],
