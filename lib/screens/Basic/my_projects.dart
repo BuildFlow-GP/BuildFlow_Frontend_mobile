@@ -8,7 +8,7 @@ import '../../services/create/project_service.dart';
 import '../../models/Basic/project_model.dart';
 
 import '../Design/my_project_details.dart';
-import '../super/project_details_super.dart'; // ✅✅✅ استيراد شاشة الإشراف
+import '../super/project_details_super.dart';
 import 'package:buildflow_frontend/themes/app_colors.dart';
 
 final Logger logger = Logger(printer: PrettyPrinter(methodCount: 1));
@@ -37,7 +37,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
   Future<void> _initializeData() async {
     if (!mounted) return;
     setState(() => _isInitializing = true);
-    _designProjectsFuture = null; // مسح الـ Futures عند إعادة التهيئة
+    _designProjectsFuture = null;
     _supervisionProjectsFuture = null;
     try {
       _sessionUserType = await Session.getUserType();
@@ -45,8 +45,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
       if (_sessionUserType == null) {
         throw Exception("User type not found in session.");
       }
-
-      await _loadProjectsBasedOnType(); //  دالة واحدة للتحميل
+      await _loadProjectsBasedOnType();
     } catch (e) {
       logger.e("Error in _initializeData", error: e);
       if (mounted) {
@@ -62,28 +61,20 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
     }
   }
 
-  // ✅ NEW: دالة موحدة لتحميل كل المشاريع
   Future<void> _loadProjectsBasedOnType() async {
     if (_sessionUserType == null || !mounted) return;
 
-    //  تعيين الـ Futures
     if (_sessionUserType!.toLowerCase() == 'office') {
-      _designProjectsFuture =
-          _projectService
-              .getAssignedOfficeProjects(); // ترجع List<ProjectModel>
+      _designProjectsFuture = _projectService.getAssignedOfficeProjects();
       _supervisionProjectsFuture =
-          _projectService
-              .getAssignedOfficeSupervisionProjects(); // ترجع List<ProjectModel>
+          _projectService.getAssignedOfficeSupervisionProjects();
     } else if (_sessionUserType!.toLowerCase() == 'individual') {
-      _designProjectsFuture =
-          _projectService.getMyProjectsp(); // ترجع List<ProjectModel>
-      _supervisionProjectsFuture =
-          _projectService.getMySupervisionProjects(); // ترجع List<ProjectModel>
+      _designProjectsFuture = _projectService.getMyProjectsp();
+      _supervisionProjectsFuture = _projectService.getMySupervisionProjects();
     } else if (_sessionUserType!.toLowerCase() == 'company') {
-      _designProjectsFuture = Future.value([]); // الشركة لا تعرض مشاريع تصميم
+      _designProjectsFuture = Future.value([]);
       _supervisionProjectsFuture =
-          _projectService
-              .getAssignedCompanySupervisionProjects(); // ترجع List<ProjectModel>
+          _projectService.getAssignedCompanySupervisionProjects();
     } else {
       _designProjectsFuture = Future.error(
         Exception("Unknown user type for design projects: $_sessionUserType"),
@@ -94,13 +85,12 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
         ),
       );
     }
-    // استدعاء setState لإعادة بناء الـ FutureBuilders
     if (mounted) setState(() {});
   }
 
   Future<void> _refreshAllProjects() async {
     logger.i("Refreshing ALL projects for user type: $_sessionUserType");
-    await _initializeData(); //  تستدعي التحميل من جديد
+    await _initializeData();
   }
 
   @override
@@ -117,7 +107,6 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: PreferredSize(
-        /* ... AppBar كما هو ... */
         preferredSize: const Size.fromHeight(100.0),
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 40, 16, 20),
@@ -169,7 +158,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
         ),
       ),
       body:
-          _isInitializing //  مؤشر تحميل عام أثناء جلب نوع المستخدم والـ Futures الأولية
+          _isInitializing
               ? Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
@@ -179,9 +168,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: contentMaxWidth),
                   child: ListView(
-                    padding: const EdgeInsets.only(
-                      bottom: 20,
-                    ), //  إضافة padding سفلي
+                    padding: const EdgeInsets.only(bottom: 20),
                     children: [
                       if (_designProjectsFuture != null &&
                           _sessionUserType?.toLowerCase() != 'company')
@@ -191,10 +178,8 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                           crossAxisCount: crossAxisCount,
                           isSupervisionProject: false,
                         ),
-
                       if (_supervisionProjectsFuture != null) ...[
-                        if (_sessionUserType?.toLowerCase() !=
-                            'company') //  لا تعرض فاصل إذا كانت الشركة تعرض قسم إشراف فقط
+                        if (_sessionUserType?.toLowerCase() != 'company')
                           const Divider(
                             height: 30,
                             thickness: 1,
@@ -215,10 +200,9 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
     );
   }
 
-  // ✅ MODIFIED: الـ Future الآن يتوقع List<ProjectModel>
   Widget _buildProjectSection({
     required String title,
-    required Future<List<ProjectModel>> projectsFuture, //  تم تغيير النوع هنا
+    required Future<List<ProjectModel>> projectsFuture,
     required int crossAxisCount,
     required bool isSupervisionProject,
   }) {
@@ -237,7 +221,6 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
           ),
         ),
         FutureBuilder<List<ProjectModel>>(
-          //  تم تغيير النوع هنا
           future: projectsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -272,9 +255,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                 ),
               );
             } else {
-              final List<ProjectModel> projects =
-                  snapshot.data!; //  النوع الآن ProjectModel
-              // لا حاجة للتحويل داخل itemBuilder بعد الآن
+              final List<ProjectModel> projects = snapshot.data!;
               return crossAxisCount > 1
                   ? GridView.builder(
                     shrinkWrap: true,
@@ -284,8 +265,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                       crossAxisCount: crossAxisCount,
                       mainAxisSpacing: 16.0,
                       crossAxisSpacing: 16.0,
-                      childAspectRatio:
-                          1.25, //  تعديل بسيط لنسبة العرض للارتفاع
+                      childAspectRatio: 1.25,
                     ),
                     itemCount: projects.length,
                     itemBuilder: (context, index) {
@@ -295,6 +275,9 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                       );
                     },
                   )
+                  // ==========================================================
+                  // =================== الجزء الخاص بالموبايل =================
+                  // ==========================================================
                   : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -306,9 +289,14 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
-                        child: _buildProjectItemCard(
-                          projects[index],
-                          isSupervisionProject: isSupervisionProject,
+                        // ✅✅✅✅✅✅✅✅✅ الحل النهائي هنا ✅✅✅✅✅✅✅✅✅
+                        // نعطي البطاقة ارتفاعاً ثابتاً لمنع خطأ الـ Layout
+                        child: SizedBox(
+                          height: 160,
+                          child: _buildProjectItemCard(
+                            projects[index],
+                            isSupervisionProject: isSupervisionProject,
+                          ),
                         ),
                       );
                     },
@@ -324,14 +312,13 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
     ProjectModel project, {
     required bool isSupervisionProject,
   }) {
-    //  ... (نفس كود _buildProjectItemCard، ولكن تأكدي أن `ProjectSupervisionDetailsScreen` موجودة أو علقي الانتقال إليها)
     return Card(
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color:
           isSupervisionProject
               ? AppColors.accent.withOpacity(0.05)
-              : AppColors.card, // لون مختلف قليلاً لمشاريع الإشراف
+              : AppColors.card,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
@@ -366,68 +353,66 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, //  للتأكد من محاذاة الـ Chip
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: Text(
-                      project.name,
-                      style: const TextStyle(
-                        fontSize: 14.5,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          project.name,
+                          style: const TextStyle(
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
+                      if (project.status != null)
+                        _getStatusColor(project.status!) != Colors.transparent
+                            ? Chip(
+                              label: Text(
+                                project.status!,
+                                style: const TextStyle(
+                                  fontSize: 9,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              backgroundColor: _getStatusColor(project.status!),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 0,
+                              ),
+                              labelPadding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            )
+                            : const SizedBox(width: 50),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  if (project.description != null &&
+                      project.description!.isNotEmpty)
+                    Text(
+                      project.description!,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 3, // يمكن زيادة عدد الأسطر قليلاً
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
                     ),
-                  ), //  زيادة maxLines
-                  if (project.status != null)
-                    _getStatusColor(project.status!) !=
-                            Colors
-                                .transparent //  لا تعرضي الـ Chip إذا لم يكن له لون (افتراضي)
-                        ? Chip(
-                          label: Text(
-                            project.status!,
-                            style: const TextStyle(
-                              fontSize: 9,
-                              color: Colors.white,
-                            ),
-                          ),
-                          backgroundColor: _getStatusColor(project.status!),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 0,
-                          ), // تعديل الـ padding
-                          labelPadding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                        )
-                        : SizedBox(
-                          width: 50,
-                        ), //  مساحة فارغة إذا لم يكن هناك status chip
                 ],
               ),
-              const SizedBox(height: 5),
-              if (project.description != null &&
-                  project.description!.isNotEmpty)
-                Text(
-                  project.description!,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    color: AppColors.textSecondary,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ), // تصغير الخط
-              const Spacer(), //  لدفع التاريخ للأسفل
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment
-                        .spaceBetween, // لوضع أيقونة الإشراف في النهاية
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
@@ -464,7 +449,6 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
   }
 
   Color _getStatusColor(String status) {
-    // ... (نفس الكود)
     switch (status.toLowerCase().replaceAll(' ', '').replaceAll('-', '')) {
       case 'pendingofficeapproval':
         return Colors.orange.shade700;
@@ -499,8 +483,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
       case 'supervisioncancelled':
         return Colors.red.shade800;
       default:
-        return Colors
-            .transparent; //  عدم إظهار الـ Chip إذا لم تكن هناك حالة معروفة
+        return Colors.transparent;
     }
   }
 }

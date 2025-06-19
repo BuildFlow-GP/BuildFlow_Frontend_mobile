@@ -61,12 +61,12 @@ class _ContactUsSectionState extends State<ContactUsSection> {
   InputDecoration _buildInputDecoration(String labelText, IconData icon) {
     return InputDecoration(
       labelText: labelText,
-      prefixIcon: Icon(
-        icon,
-        color: AppColors.accent,
-      ), // استخدام AppColors.accent
+      prefixIcon: Icon(icon, color: AppColors.accent),
+      // استخدام AppColors.accent
       labelStyle: TextStyle(color: AppColors.textSecondary),
-      hintStyle: TextStyle(color: AppColors.textSecondary.withOpacity(0.7)),
+      hintStyle: TextStyle(
+        color: AppColors.accent.withAlpha((0.7 * 255).toInt()),
+      ),
       filled: true,
       fillColor: AppColors.background, // لون تعبئة الحقل من AppColors
       border: OutlineInputBorder(
@@ -83,7 +83,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-          color: AppColors.textSecondary.withOpacity(0.3),
+          color: AppColors.accent.withAlpha((0.3 * 255).toInt()),
           width: 1.0,
         ), // حدود عند التفعيل
       ),
@@ -112,7 +112,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
         Icon(
           icon,
           color: AppColors.accent,
-          size: 20,
+          size: 15,
         ), // استخدام AppColors.accent
         const SizedBox(width: 12),
         Expanded(
@@ -120,7 +120,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 15,
+              fontSize: 12,
               color: AppColors.textSecondary, // استخدام AppColors
             ),
           ),
@@ -133,6 +133,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
   Widget _buildContactForm(bool isWideScreen) {
     return Form(
       key: _formKey,
+
       child: Column(
         crossAxisAlignment:
             CrossAxisAlignment.start, // لمحاذاة العناصر إلى اليسار
@@ -143,8 +144,10 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                 Expanded(
                   child: TextFormField(
                     controller: _nameController,
+
                     decoration: _buildInputDecoration(
                       'Your Name',
+
                       Icons.person,
                     ),
                     validator: (value) {
@@ -153,18 +156,23 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                       }
                       return null;
                     },
-                    style: TextStyle(color: AppColors.textPrimary),
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 16), // مسافة بين حقلي الاسم والايميل
+                const SizedBox(width: 12), // مسافة بين حقلي الاسم والايميل
                 Expanded(
                   child: TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
+
                     decoration: _buildInputDecoration(
                       'Your Email',
                       Icons.email,
                     ),
+
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -174,7 +182,10 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                       }
                       return null;
                     },
-                    style: TextStyle(color: AppColors.textPrimary),
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
@@ -191,9 +202,9 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                     }
                     return null;
                   },
-                  style: TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 13),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -207,12 +218,12 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                     }
                     return null;
                   },
-                  style: TextStyle(color: AppColors.textPrimary),
+                  style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
                 ),
               ],
             ),
           const SizedBox(
-            height: 16,
+            height: 13,
           ), // مسافة بعد الاسم والايميل (سواء كانوا بجانب بعض أو فوق بعض)
           TextFormField(
             controller: _messageController,
@@ -224,18 +235,18 @@ class _ContactUsSectionState extends State<ContactUsSection> {
               }
               return null;
             },
-            style: TextStyle(color: AppColors.textPrimary),
+            style: TextStyle(color: AppColors.textPrimary, fontSize: 12),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 13),
           SizedBox(
             width: double.infinity, // لجعل الزر يمتد على عرض العمود
-            height: 50,
+            height: 35,
             child: ElevatedButton.icon(
               onPressed: _sendContactMessage, // ربط الزر بدالة الإرسال
               icon: Icon(Icons.send, color: Colors.white),
               label: Text(
                 'Send Message',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: TextStyle(fontSize: 14, color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.accent, // لون الزر الأساسي
@@ -300,14 +311,14 @@ class _ContactUsSectionState extends State<ContactUsSection> {
             ),
             color: AppColors.card, // لون خلفية البطاقة
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(22.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Contact Us',
                     style: TextStyle(
-                      fontSize: 28.0, // حجم خط أكبر قليلاً
+                      fontSize: 20.0, // حجم خط أكبر قليلاً
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                     ),
@@ -316,7 +327,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                   Text(
                     'Have a question or need assistance? Send us a message!',
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 12.0,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -345,11 +356,9 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                   else // تصميم الشاشات الصغيرة (أقل من 600 بكسل)
                     Column(
                       children: [
-                        _buildContactForm(
-                          false,
-                        ), // تمرير false لأنها شاشة صغيرة
+                        _buildContactForm(false),
                         const SizedBox(
-                          height: 32,
+                          height: 20,
                         ), // مسافة بين النموذج ومعلومات الاتصال
                         _buildContactInfo(),
                       ],

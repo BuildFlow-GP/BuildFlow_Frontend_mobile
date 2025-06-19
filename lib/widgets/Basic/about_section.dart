@@ -32,10 +32,8 @@ class AboutSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0), // حواف دائرية
             boxShadow: [
               BoxShadow(
-                color: AppColors.shadow.withOpacity(
-                  0.1,
-                ), // ظل خفيف من AppColors
-                blurRadius: 10,
+                color: AppColors.accent.withAlpha((1 * 255).toInt()),
+                blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
             ],
@@ -47,26 +45,26 @@ class AboutSection extends StatelessWidget {
                 "About Us",
                 style: TextStyle(
                   fontSize:
-                      30, // حجم خط أكبر قليلاً ليظهر أوضح على الشاشات الكبيرة
+                      18, // حجم خط أكبر قليلاً ليظهر أوضح على الشاشات الكبيرة
                   fontWeight: FontWeight.bold,
                   color: AppColors.accent,
                   letterSpacing: 0.5,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               Text(
-                "BuildFlow helps users start, manage, and showcase architecture & engineering projects easily. "
                 "At BuildFlow, we believe great design starts with the right collaboration. "
-                "Our platform bridges the gap between individuals, offices, and companies to streamline the journey from concept to construction. Whether you're planning a dream home, "
-                "designing an innovative workspace, or managing large-scale developments, BuildFlow empowers you with the tools and partnerships you need to succeed. "
-                "With smart search, detailed profiles, and dynamic project tools, we’re reimagining how ideas become reality—faster, smarter, and more connected than ever.",
+                '\n'
+                "Our platform bridges the gap between users, offices, and companies to streamline the journey from concept to construction. Whether you're planning a dream home, "
+                "or designing an innovative workspace.\n BuildFlow empowers you with the tools and partnerships you need to succeed. "
+                "With dynamic project tools, we’re reimagining how ideas become reality faster, smarter, and more connected than ever.",
                 style: TextStyle(
-                  fontSize: 18, // خط أوضح للويب
-                  height: 1.6,
+                  fontSize: 13, // خط أوضح للويب
+                  height: 1.3,
                   color: AppColors.textPrimary,
                 ),
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.justify, // توسيط النص
               ),
             ],
           ),

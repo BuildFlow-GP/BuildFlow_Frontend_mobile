@@ -1,5 +1,6 @@
 import 'package:buildflow_frontend/themes/app_colors.dart'; // تأكد من المسار الصحيح
 import '../services/Basic/favorite_service.dart';
+import '../widgets/Navbar/app_drawer.dart';
 import 'ReadonlyProfiles/project_readonly_profile.dart';
 import 'Basic/my_projects.dart';
 import 'ReadonlyProfiles/office_readonly_profile.dart';
@@ -10,7 +11,6 @@ import 'package:get/get.dart';
 import '../widgets/Basic/about_section.dart';
 import '../widgets/Basic/contact_us.dart';
 import 'Basic/type_of_project.dart';
-import '../widgets/Navbar/navbar.dart';
 import '../models/Basic/office_model.dart';
 import '../models/Basic/company_model.dart';
 import '../models/Basic/project_model.dart';
@@ -566,18 +566,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // نحدد إذا كان العرض للموبايل. يمكنك تعديل هذا الرقم (مثلاً 768)
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return Scaffold(
       backgroundColor: AppColors.background,
+
+      // ✅ 1. الـ AppBar: يظهر فقط إذا كان العرض للموبايل
+      appBar:
+          isMobile
+              ? AppBar(
+                backgroundColor:
+                    AppColors.primary, // استخدم لون من الثيم الخاص بك
+                elevation: 4,
+                title: Hero(
+                  // وضعت اللوجو هنا كعنوان
+                  tag: 'app-logo',
+                  child: Image.asset(
+                    'assets/logoo.png',
+                    height: 40, // اضبط الارتفاع المناسب
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                centerTitle: true,
+                // سيتم وضع زر القائمة تلقائياً على اليسار (في اللغات LTR)
+                // لا داعي لإضافته يدوياً
+              )
+              : null, // لا تعرض أي AppBar على الشاشات الكبيرة
+      // ✅ 2. الـ Drawer: نضع هنا الـ AppDrawer الذي أرسلته
+      drawer: const AppDrawer(),
+
+      // ✅ 3. المحتوى: يبقى كما هو
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Navbar(),
-            const SizedBox(height: 35.0),
+            // سنحذف الـ Navbar من هنا تماماً لتبسيط الأمور
+            // const DrawerWrapper(child: Navbar()), // ❌ محذوف
+            const SizedBox(height: 20.0),
             const AboutSection(),
-            const SizedBox(height: 50.0),
+            const SizedBox(height: 30.0),
 
-            // Buttons (2 only)
             LayoutBuilder(
               builder: (context, constraints) {
                 final isWide = constraints.maxWidth > 600;

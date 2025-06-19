@@ -283,8 +283,8 @@ class _DesignAgreementScreenState extends State<DesignAgreementScreen> {
 
       if (result != null) {
         PlatformFile file = result.files.single;
-        if (file.size > 5 * 1024 * 1024) {
-          // 5MB
+        if (file.size > 20 * 1024 * 1024) {
+          // 20MB
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('File size must be less than 5MB')),
@@ -714,7 +714,7 @@ class _DesignAgreementScreenState extends State<DesignAgreementScreen> {
                 vertical: 8.0,
               ),
               child: Text(
-                'Please upload the design agreement PDF (max 5MB).',
+                'Please upload the design agreement PDF (max 20MB).',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
