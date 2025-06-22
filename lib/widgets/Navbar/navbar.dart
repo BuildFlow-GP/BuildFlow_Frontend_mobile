@@ -1,3 +1,4 @@
+import 'package:buildflow_frontend/screens/map/parcel_viewer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:buildflow_frontend/themes/app_colors.dart';
@@ -13,6 +14,7 @@ class Navbar extends StatelessWidget {
     {'label': 'About Us', 'icon': Icons.info},
     {'label': 'Contact Us', 'icon': Icons.contact_page},
     {'label': 'Chat', 'icon': Icons.chat},
+    {'label': 'Map', 'icon': Icons.map},
     {'label': 'Logout', 'icon': Icons.logout},
   ];
 
@@ -188,6 +190,9 @@ class Navbar extends StatelessWidget {
         } else {
           Get.snackbar('Error', 'User ID not found.');
         }
+        break;
+      case 'Map':
+        Get.offAll(() => const ParcelViewerScreen());
         break;
       case 'Logout':
         await Session.clear();

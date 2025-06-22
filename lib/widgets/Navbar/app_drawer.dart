@@ -1,3 +1,4 @@
+import 'package:buildflow_frontend/screens/map/parcel_viewer_screen.dart';
 import 'package:buildflow_frontend/screens/sign/signin_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +57,16 @@ class AppDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ChatListScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.map),
+            title: const Text('Map'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ParcelViewerScreen()),
               );
             },
           ),
