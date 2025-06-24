@@ -23,7 +23,9 @@ dependencies:
 
   # الدفع وعرض الويب
  # flutter_braintree: ^4.0.0
-  webview_flutter: ^4.13.0
+  #webview_flutter: ^4.13.0
+  webview_flutter: ^4.4.2  #  ✅ الرجوع لإصدار 4.4.x
+  webview_flutter_android: ^3.12.1 #
 
   # أدوات مساعدة
   get: ^4.6.6
@@ -44,6 +46,7 @@ dependencies:
   url_launcher: ^6.3.1
   cupertino_icons: ^1.0.8
   http_parser: ^4.1.2
+
 
 dev_dependencies:
   flutter_test:
