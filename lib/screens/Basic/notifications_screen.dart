@@ -694,8 +694,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             icon:
                                 _isProcessingAction
                                     ? const SizedBox(
-                                      width: 16,
-                                      height: 16,
+                                      width: 12,
+                                      height: 12,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
                                         valueColor: AlwaysStoppedAnimation(
@@ -723,11 +723,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               backgroundColor: Colors.green.shade600,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                                horizontal: 6,
+                                vertical: 5,
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 9,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -737,8 +737,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             icon:
                                 _isProcessingAction
                                     ? const SizedBox(
-                                      width: 16,
-                                      height: 16,
+                                      width: 10,
+                                      height: 10,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
                                       ),
@@ -761,11 +761,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               side: BorderSide(color: Colors.red.shade400),
                               foregroundColor: Colors.red.shade700,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                                horizontal: 6,
+                                vertical: 5,
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 9,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -791,7 +791,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     )
                                     : const Icon(
                                       Icons.playlist_add_check_circle_outlined,
-                                      size: 16,
+                                      size: 14,
                                     ),
                             label: Text(
                               _isProcessingAction
@@ -809,11 +809,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               backgroundColor: AppColors.accent,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                                horizontal: 6,
+                                vertical: 5,
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 7,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -831,7 +831,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     )
                                     : const Icon(
                                       Icons.highlight_off_outlined,
-                                      size: 16,
+                                      size: 14,
                                     ),
                             label: Text(
                               _isProcessingAction
@@ -849,11 +849,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               side: BorderSide(color: AppColors.error),
                               foregroundColor: AppColors.error,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                                horizontal: 6,
+                                vertical: 5,
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 12,
+                                fontSize: 7,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

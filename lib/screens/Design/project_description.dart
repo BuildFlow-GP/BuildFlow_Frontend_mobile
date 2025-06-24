@@ -613,16 +613,16 @@ class _ProjectDescriptionScreenState extends State<ProjectDescriptionScreen> {
               CrossAxisAlignment.end, // لمحاذاة زر الإضافة بشكل أفضل
           children: [
             Expanded(
-              flex: 3, // إعطاء مساحة أكبر لاسم الغرفة
+              flex: 2, // إعطاء مساحة أكبر لاسم الغرفة
               child: _buildTextFieldInternal(
                 'Room Name',
                 roomNameController,
                 readOnly: _isSubmitting,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 5),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
@@ -652,14 +652,11 @@ class _ProjectDescriptionScreenState extends State<ProjectDescriptionScreen> {
                     ), // حدود عند عدم التركيز
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: AppColors.accent,
-                        width: 1.5,
-                      ),
+                      borderSide: BorderSide(color: AppColors.accent, width: 1),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
+                      horizontal: 8,
+                      vertical: 8,
                     ), // تعديل الحشو
                   ),
                   style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
@@ -684,7 +681,7 @@ class _ProjectDescriptionScreenState extends State<ProjectDescriptionScreen> {
             const SizedBox(width: 8),
             SizedBox(
               // تحديد حجم زر الإضافة
-              height: 48, // نفس ارتفاع الحقول الأخرى تقريباً
+              height: 40, // نفس ارتفاع الحقول الأخرى تقريباً
               child: ElevatedButton(
                 // تغيير إلى ElevatedButton
                 style: ElevatedButton.styleFrom(
@@ -732,7 +729,7 @@ class _ProjectDescriptionScreenState extends State<ProjectDescriptionScreen> {
                     icon: Icon(
                       Icons.remove_circle_outline,
                       color: AppColors.error,
-                      size: 20,
+                      size: 18,
                     ),
                     onPressed:
                         _isSubmitting
@@ -740,7 +737,7 @@ class _ProjectDescriptionScreenState extends State<ProjectDescriptionScreen> {
                             : () => removeDirectionalRoom(index),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
+                    horizontal: 10,
                     vertical: 0,
                   ), // تقليل الحشو
                 ),
