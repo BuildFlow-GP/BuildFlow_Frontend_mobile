@@ -20,7 +20,8 @@ class _LicenseFormScreenState extends State<LicenseFormScreen> {
   );
   // ... أي Controllers أخرى لبيانات الترخيص/المشروع
 
-  ProjectModel _currentProject = ProjectModel(
+  // ignore: unused_field
+  final ProjectModel _currentProject = ProjectModel(
     id: 1, // مثال ID
     name: 'Default Project',
     createdAt: DateTime.now(),

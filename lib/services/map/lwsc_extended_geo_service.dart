@@ -119,9 +119,9 @@ class LWSCExtendedGeoService {
                   );
                   final proj4.Point p4326 = _p28191.transform(_p4326, p28191);
 
-                  currentPolygonRing.add(LatLng(p4326.y!, p4326.x!));
-                  sumLat += p4326.y!;
-                  sumLon += p4326.x!;
+                  currentPolygonRing.add(LatLng(p4326.y, p4326.x));
+                  sumLat += p4326.y;
+                  sumLon += p4326.x;
                   pointCount++;
                 }
               }
